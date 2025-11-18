@@ -2,8 +2,8 @@
 
 namespace Infra.Data.Repositories
 {
-    public class ConnectionContext
+    public class ConnectionContext(MySqlConnectionString MySqlConnectionString)
     {
-        public SqlConnection GetConnection() => new("");
+        public SqlConnection GetConnection() => new(MySqlConnectionString.ConnectionString);
     }
 }

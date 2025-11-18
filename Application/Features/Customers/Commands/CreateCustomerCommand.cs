@@ -1,10 +1,15 @@
 ﻿namespace Application.Features.Customers.Commands
 {
-    public class CreateCustomerCommand : ICommand<Result<Guid>>
+    public class CreateCustomerCommand 
     {
-        public string FirstName { get; set; } = string.Empty;
-        public string LastName { get; set; } = string.Empty;
-        public override string ToString() => $"First name: {FirstName}";
+        public required string FirstName { get; set; } = string.Empty;
+        public required string LastName { get; set; } = string.Empty;
+        public required DateOnly BirthDate { get; set; }
+        public required string Occupation { get; set; } = string.Empty;
+        public override string ToString()
+        {
+            return $"{{ FirstName: \"{FirstName}\", LastName: \"{LastName}\", BirthDate: \"{BirthDate:yyyy-MM-dd}\", Occupation: \"{Occupation}\" }}";
+        }
 
     }
 }

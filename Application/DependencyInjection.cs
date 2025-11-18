@@ -1,6 +1,5 @@
-﻿using Application.Features;
+﻿using Application.Features.Customers.Handlers;
 using Microsoft.Extensions.DependencyInjection;
-using System.Reflection;
 
 namespace Application
 {
@@ -8,24 +7,7 @@ namespace Application
     {
         public static IServiceCollection AddApplication(this IServiceCollection services)
         {
-            var assembly = Assembly.GetExecutingAssembly();
-
-            services.AddScoped<IDispatcher, Dispatcher>();
-
-            foreach (var type in assembly.GetTypes())
-            {
-                if (type.IsAbstract || type.IsInterface)
-                    continue;
-
-                var interfaces = type.GetInterfaces()
-                    .Where(i => i.IsGenericType && (
-                        i.GetGenericTypeDefinition() == typeof(ICommandHandler<,>) ||
-                        i.GetGenericTypeDefinition() == typeof(IQueryHandler<,>)
-                    ));
-
-                foreach (var @interface in interfaces)
-                    services.AddScoped(@interface, type);
-            }
+            services.AddScoped<CreateCustomerCommandHandler>();
 
             return services;
         }

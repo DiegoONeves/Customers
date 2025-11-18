@@ -1,6 +1,19 @@
-﻿namespace Infra.Data
+﻿using Application.Repositories;
+using Infra.Data.Repositories;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+
+namespace Infra.Data
 {
-    public class DependencyInjection
+    public static class DependencyInjection
     {
+        public static IServiceCollection AddInfrastructureData(this IServiceCollection services, IConfiguration config)
+        {
+            services.AddSingleton(new MySqlConnectionString(config.GetConnectionString("DefaultConnection")!));
+            services.AddScoped<ConnectionContext>();
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+
+            return services;
+        }
     }
 }

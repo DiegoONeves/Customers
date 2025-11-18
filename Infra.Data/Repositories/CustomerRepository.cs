@@ -8,9 +8,34 @@ namespace Infra.Data.Repositories
 {
     public class CustomerRepository : ICustomerRepository
     {
-        public async Task CreateAsync(SqlConnection connection, Customer customer, DbTransaction? transaction = null)
+        public async Task CreateAsync(
+            SqlConnection connection,
+            Customer customer,
+            DbTransaction? transaction = null)
         {
-            await connection.ExecuteAsync("", customer, transaction);
+            const string sql = @"
+        INSERT INTO [dbo].[Customer]
+        (
+            Id,
+            FirstName,
+            LastName,
+            BirthDate,
+            Occupation,
+            CreateDateTime,
+            UpdateDateTime
+        )
+        VALUES
+        (
+            @Id,
+            @FirstName,
+            @LastName,
+            @BirthDate,
+            @Occupation,
+            @CreateDateTime,
+            @UpdateDateTime
+        );";
+
+            await connection.ExecuteAsync(sql, customer, transaction);
         }
     }
 }

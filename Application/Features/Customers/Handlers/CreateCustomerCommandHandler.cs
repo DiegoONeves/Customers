@@ -5,26 +5,24 @@ using Infra.Data.Repositories;
 
 namespace Application.Features.Customers.Handlers
 {
-    public class CreateCustomerCommandHandler(ConnectionContext context, ICustomerRepository customerRepository) : ICommandHandler<CreateCustomerCommand, Result<Guid>>
+    public class CreateCustomerCommandHandler(ConnectionContext context, ICustomerRepository customerRepository) 
     {
         ConnectionContext _context = context;
         ICustomerRepository _customerRepository = customerRepository;
         public async Task<Result<Guid>> Handle(CreateCustomerCommand command)
         {
-            var customer = new Customer(command.FirstName, command.LastName);
-
+            var newCustomer = new Customer(command.FirstName, command.LastName, command.BirthDate, command.Occupation);
             using (var connection = _context.GetConnection())
             {
                 await connection.OpenAsync();
                 var transaction = await connection.BeginTransactionAsync();
 
-
-                await _customerRepository.CreateAsync(connection, customer, transaction);
+                await _customerRepository.CreateAsync(connection, newCustomer, transaction);
 
                 await transaction.CommitAsync();
             }
 
-            return Result<Guid>.Success(customer.Id);
+            return Result<Guid>.Success(newCustomer.Id);
         }
     }
 }
