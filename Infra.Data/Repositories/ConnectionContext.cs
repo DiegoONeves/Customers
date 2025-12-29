@@ -1,9 +1,9 @@
-﻿using Microsoft.Data.SqlClient;
+﻿using MySqlConnector;
 
 namespace Infra.Data.Repositories
 {
     public class ConnectionContext(MySqlConnectionString MySqlConnectionString)
     {
-        public SqlConnection GetConnection() => new(MySqlConnectionString.ConnectionString);
+        public MySqlConnection GetConnection() => new(MySqlConnectionString.ConnectionString);
     }
 }

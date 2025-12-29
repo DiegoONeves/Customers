@@ -22,9 +22,11 @@ var app = builder.Build();
 app.UseHttpsRedirection();
 
 // Endpoints
-app.MapPost("/customers", async (CreateCustomerCommand command, CreateCustomerCommandHandler handler) =>
+app.MapPost("/customers", async (CreateCustomerCommand command, 
+    CreateCustomerCommandHandler handler, 
+    CancellationToken ct) =>
 {
-    var result = await handler.Handle(command);
+    var result = await handler.Handle(command, ct);
     return result.IsSuccess ? Results.Ok(result.Value) : Results.BadRequest(result.Error);
 })
 .WithName("CreateCustomer")
