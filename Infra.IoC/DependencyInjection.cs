@@ -1,4 +1,5 @@
 ﻿using Application;
+using Infra.ClientApi;
 using Infra.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -11,6 +12,7 @@ namespace Infra.IoC
         {
             services.AddApplication();
             services.AddInfrastructureData(configuration);
+            services.AddClientApi();
             return services;
         }
     }
