@@ -14,6 +14,8 @@ namespace Infra.Data.Repositories
      DbTransaction? transaction,
      CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             const string sqlCustomer = @"
 INSERT INTO Customer
 (

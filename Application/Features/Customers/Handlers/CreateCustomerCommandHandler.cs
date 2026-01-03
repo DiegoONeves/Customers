@@ -18,6 +18,8 @@ namespace Application.Features.Customers.Handlers
         private readonly IResilientApiClient _api = api;
         public async Task<Result<Guid>> Handle(CreateCustomerCommand command, CancellationToken cancellationToken)
         {
+            cancellationToken.ThrowIfCancellationRequested();
+
             using (var connection = _context.GetConnection())
             {
                 await connection.OpenAsync();
@@ -26,6 +28,8 @@ namespace Application.Features.Customers.Handlers
                 var addresses = new List<Address>();
                 foreach (var item in command.Addresses)
                 {
+                    cancellationToken.ThrowIfCancellationRequested();
+
                     var data = await _api.GetAsync<object>("via-cep", $"/ws/{item.PostalCode}/json/");
 
                     var state = new State(item.State);
@@ -45,6 +49,8 @@ namespace Application.Features.Customers.Handlers
                 var newCustomer = new Customer(command.FirstName, command.LastName, command.BirthDate, command.Occupation, addresses);
 
                 await _customerRepository.CreateAsync(connection, newCustomer, transaction, cancellationToken);
+
+                cancellationToken.ThrowIfCancellationRequested();
 
                 await transaction.CommitAsync();
 
